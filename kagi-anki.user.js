@@ -109,6 +109,22 @@
     return '';
   }
 
+  function getSynonyms(p) {
+    let el = p;
+    while (el && el !== document.body) {
+      if (el.querySelectorAll('p[dir="auto"]').length === 1) {
+        const label = Array.from(el.querySelectorAll('span')).find((s) => /^Synonyms\b/.test(s.textContent.trim()));
+        if (label && label.parentElement) {
+          return Array.from(label.parentElement.querySelectorAll('button'))
+            .map((b) => b.textContent.trim())
+            .filter(Boolean);
+        }
+      }
+      el = el.parentElement;
+    }
+    return [];
+  }
+
   function getDefinitions() {
     const out = [];
     for (const id of ['primary-meaning', 'other-meanings']) {
@@ -118,10 +134,10 @@
       const defs = Array.from(sec.querySelectorAll('p[dir="auto"]'));
       const n = Math.min(posTags.length, defs.length);
       for (let i = 0; i < n; i++) {
-        out.push({ pos: posTags[i].textContent.trim(), text: defs[i].textContent.trim() });
+        out.push({ pos: posTags[i].textContent.trim(), text: defs[i].textContent.trim(), synonyms: getSynonyms(defs[i]) });
       }
       if (posTags.length === 0) {
-        for (const d of defs) out.push({ pos: '', text: d.textContent.trim() });
+        for (const d of defs) out.push({ pos: '', text: d.textContent.trim(), synonyms: getSynonyms(d) });
       }
     }
     return out;
@@ -196,7 +212,15 @@
       parts.push('<h4 style="margin:12px 0 4px;font-size:1em;text-align:left">Definitions</h4>');
       parts.push('<ul style="margin:0;padding-left:1.3em">');
       for (const x of d.definitions) {
-        parts.push('<li style="margin:4px 0">' + (x.pos ? '<span style="color:#8a8a8f">' + esc(x.pos) + '</span> ' : '') + esc(x.text) + '</li>');
+        parts.push(
+          '<li style="margin:4px 0">' +
+            (x.pos ? '<span style="color:#8a8a8f">' + esc(x.pos) + '</span> ' : '') +
+            esc(x.text) +
+            (x.synonyms && x.synonyms.length
+              ? '<div style="color:#8a8a8f;font-size:0.9em;margin-top:2px">Synonyms: ' + x.synonyms.map(esc).join(', ') + '</div>'
+              : '') +
+            '</li>'
+        );
       }
       parts.push('</ul>');
     }

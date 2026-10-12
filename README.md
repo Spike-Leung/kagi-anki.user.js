@@ -5,8 +5,8 @@ entry into an Anki note, via the [AnkiConnect](https://foosoft.net/projects/anki
 on `127.0.0.1:8765`.
 
 The script adds a **加入 Anki** button right next to the site's own *Anki* button. Clicking it reads
-the word, pronunciation, definitions, examples, notes and etymology from the current dictionary page
-and creates a new note.
+the word, pronunciation, definitions, synonyms, examples, notes and etymology from the current
+dictionary page and creates a new note.
 
 Built by OpenCode + DeepSeek Flash V4.1.
 
@@ -18,6 +18,7 @@ than a plain export:
 - **Examples on the front** — context that makes the meaning easier to recall before you flip.
 - **Etymology at the top of the back** — word origins are a strong memory hook.
 - **Part of speech before each definition** — `noun` / `adjective`, shown dimmed.
+- **Synonyms under each definition** — shown dimmed beneath the meaning.
 - **Target word highlighted** — bold and underlined in every example sentence.
 - **Chinese translation on its own line, dimmed** — the English example stays prominent and the
   Chinese doesn't distract.
