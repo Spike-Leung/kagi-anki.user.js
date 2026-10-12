@@ -23,10 +23,10 @@ than a plain export:
 - **Chinese translation on its own line, dimmed** — the English example stays prominent and the
   Chinese doesn't distract.
 
-|       | Built-in Anki           | This Script      |
-|-------|-------------------------|------------------|
-| Front | ![](./origin-front.png) | ![](./front.png) |
-| Back  | ![](./origin-back.png)  | ![](./back.png)  |
+|       | Built-in Anki                      | This Script                 |
+|-------|------------------------------------|-----------------------------|
+| Front | ![](./screenshot/origin-front.png) | ![](./screenshot/front.png) |
+| Back  | ![](./screenshot/origin-back.png)  | ![](./screenshot/back.png)  |
 
 ## Requirements
 
