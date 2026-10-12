@@ -31,9 +31,8 @@ than a plain export:
 ## Requirements
 
 - Anki (desktop) with **AnkiConnect** enabled and listening on `127.0.0.1:8765`.
-- AnkiConnect's CORS allow-list must include `https://translate.kagi.com`. The fork vendored in
-  [`ankiconnect/`](ankiconnect/) already does this.
-- A userscript manager — [Tampermonkey](https://www.tampermonkey.net/) (or Violentmonkey).
+- AnkiConnect's CORS allow-list must include `https://translate.kagi.com`.
+- A userscript manager — [Tampermonkey](https://www.tampermonkey.net/).
 - A browser that allows an `https://translate.kagi.com` page to POST to `http://127.0.0.1:8765`
   (loopback is treated as a secure context; the vendored fork also answers the Private Network Access
   preflight).
@@ -42,17 +41,17 @@ than a plain export:
 
 ### 1. AnkiConnect
 
-Pick one:
 
-- **Use the vendored fork (recommended for this project).** Copy the [`ankiconnect/`](ankiconnect/)
-  folder into Anki's add-ons directory (in Anki: *Tools → Add-ons → View Files*, then go up one
-  level). Restart Anki.
-- **Use upstream AnkiConnect.** Install it from AnkiWeb (**Code: 2055492159**), then open *Tools → Add-ons → AnkiConnect →
-  Config* and add `https://translate.kagi.com` to `webCorsOriginList`:
+- In Anki, go to `Tools → Add-ons → Get Add-ons` and enter code `2055492159`, then restart Anki.
+- Go to `Tools → Add-ons → AnkiConnect → Config` and add this site to webCorsOriginList:
 
-  ```json
-  "webCorsOriginList": ["http://localhost", "https://translate.kagi.com"]
-  ```
+```json
+"webCorsOriginList": [
+  "http://localhost",
+  "https://translate.kagi.com"
+]
+```
+- Close and reopen Anki for the changes to take effect.
 
 ### 2. Userscript
 
@@ -83,19 +82,15 @@ Auto-created with two fields (`Front`, `Back`) and one card template:
 - Front template: `{{Front}}`
 - Back template: `{{Back}}`
 
-Because the back template does not use `{{FrontSide}}`, the front's examples are only shown while the
-question is displayed and are not repeated on the answer.
-
 ## Licensing & attribution
 
 - **`kagi-anki.user.js` and this README** are released into the public domain under the
   [Unlicense](LICENSE). The script contains no AnkiConnect code; it only talks to AnkiConnect's
   public HTTP/JSON API at runtime.
-- **`ankiconnect/`** is a lightly modified copy of **AnkiConnect** by Alex Yatskov / FooSoft, licensed
+- **`ankiconnect/`** is a copy of **AnkiConnect** by Alex Yatskov / FooSoft, licensed
   under the **GNU General Public License, version 3 or later** (GPL-3.0-or-later). It is vendored
-  here for reference; the local modification adds `https://translate.kagi.com` to the CORS
-  allow-list. See [`ankiconnect/LICENSE`](ankiconnect/LICENSE) and the original copyright headers in
-  each file. Upstream: <https://foosoft.net/projects/anki-connect/>.
+  here for reference; See [`ankiconnect/LICENSE`](ankiconnect/LICENSE) and the original copyright headers in
+  each file. Upstream: <https://git.sr.ht/~foosoft/anki-connect>.
 
 ## Disclaimer
 
