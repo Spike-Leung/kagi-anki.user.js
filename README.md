@@ -31,11 +31,7 @@ than a plain export:
 ## Requirements
 
 - Anki (desktop) with **AnkiConnect** enabled and listening on `127.0.0.1:8765`.
-- AnkiConnect's CORS allow-list must include `https://translate.kagi.com`.
 - A userscript manager — [Tampermonkey](https://www.tampermonkey.net/).
-- A browser that allows an `https://translate.kagi.com` page to POST to `http://127.0.0.1:8765`
-  (loopback is treated as a secure context; the vendored fork also answers the Private Network Access
-  preflight).
 
 ## Installation
 
