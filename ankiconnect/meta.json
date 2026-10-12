@@ -1,1 +1,1 @@
-{"name": "AnkiConnect", "mod": 1762717231, "min_point_version": 45, "max_point_version": 45, "branch_index": 1, "disabled": false, "config": {"apiKey": null, "apiLogPath": null, "ignoreOriginList": [], "webBindAddress": "127.0.0.1", "webBindPort": 8765, "webCorsOriginList": ["http://localhost", "https://translate.kagi.com"]}}
+{"conflicts": ["AnkiConnectDev"], "name": "Anki-Connect", "mod": 1791769659, "min_point_version": 260800, "max_point_version": 260800, "branch_index": 2, "disabled": false}
