@@ -2,7 +2,7 @@
 // @name         Kagi Translate → Anki
 // @version      1.0.0
 // @description  Add a Kagi Translate dictionary entry to Anki via AnkiConnect (127.0.0.1:8765). Adds a button next to the built-in "Anki" button.
-// @author       you
+// @author       SpikeLeung
 // @license      Unlicense
 // @match        https://translate.kagi.com/*
 // @run-at       document-idle
