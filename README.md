@@ -87,10 +87,9 @@ Auto-created with two fields (`Front`, `Back`) and one card template:
 - **`kagi-anki.user.js` and this README** are released into the public domain under the
   [Unlicense](LICENSE). The script contains no AnkiConnect code; it only talks to AnkiConnect's
   public HTTP/JSON API at runtime.
-- **`ankiconnect/`** is a copy of **AnkiConnect** by Alex Yatskov / FooSoft, licensed
-  under the **GNU General Public License, version 3 or later** (GPL-3.0-or-later). It is vendored
-  here for reference; See [`ankiconnect/LICENSE`](ankiconnect/LICENSE) and the original copyright headers in
-  each file. Upstream: <https://git.sr.ht/~foosoft/anki-connect>.
+- **`ankiconnect/`** is a copy of **AnkiConnect** by Alex Yatskov, licensed under the
+  **GNU General Public License**. It is vendored here for reference. Upstream:
+  <https://git.sr.ht/~foosoft/anki-connect>.
 
 ## Disclaimer
 
