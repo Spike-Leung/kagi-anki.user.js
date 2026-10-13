@@ -24,10 +24,10 @@ than a plain export:
 - **Chinese translation on its own line, dimmed** — the English example stays prominent and the
   Chinese doesn't distract.
 
-|       | Built-in Anki                      | This Script                 |
-|-------|------------------------------------|-----------------------------|
-| Front | ![](./screenshot/origin-front.png) | ![](./screenshot/front.png) |
-| Back  | ![](./screenshot/origin-back.png)  | ![](./screenshot/back.png)  |
+|       | Built-in Anki                        | This Script                                 |
+|-------|--------------------------------------|---------------------------------------------|
+| Front | ![](./screenshot/original-front.png) | ![](./screenshot/front-critique.png) |
+| Back  | ![](./screenshot/original-back.png)  | ![](./screenshot/back-critique.png)  |
 
 ## Requirements
 
