@@ -99,15 +99,16 @@
   }
 
   function getPronunciation() {
-    const pill = document.querySelector('.pronunciation-pill');
-    if (!pill) return '';
-    for (const s of pill.querySelectorAll('span')) {
-      if (s.children.length === 0) {
-        const t = s.textContent.trim();
-        if (t) return t;
-      }
+    const out = [];
+    for (const pill of document.querySelectorAll('.pronunciation-pill')) {
+      const span = pill.querySelector('span');
+      if (!span) continue;
+      const clone = span.cloneNode(true);
+      for (const s of clone.querySelectorAll('span')) s.remove();
+      const t = clone.textContent.replace(/\s+/g, ' ').trim();
+      if (t && !out.includes(t)) out.push(t);
     }
-    return '';
+    return out.join(' / ');
   }
 
   function getSynonyms(p) {
@@ -187,11 +188,12 @@
         s.replaceWith(b);
       }
       const html = clone.innerHTML;
-      const idx = html.indexOf('（');
-      out.push({
-        en: (idx >= 0 ? html.slice(0, idx) : html).trim(),
-        zh: idx >= 0 ? html.slice(idx).trim() : '',
-      });
+      const m = html.match(/\s*[（(]([^（()]*)[）)]\s*$/);
+      if (m && /[\u3400-\u9fff\uf900-\ufaff]/.test(m[1])) {
+        out.push({ en: html.slice(0, m.index).trim(), zh: html.slice(m.index).trim() });
+      } else {
+        out.push({ en: html.trim(), zh: '' });
+      }
     }
     return out;
   }
