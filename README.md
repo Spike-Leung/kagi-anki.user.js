@@ -1,8 +1,7 @@
 # Kagi Translate → Anki
 
 A Tampermonkey userscript that turns a [Kagi Translate](https://translate.kagi.com) dictionary
-entry into an Anki note, via the [AnkiConnect](https://git.sr.ht/~foosoft/anki-connect) HTTP API
-on `127.0.0.1:8765`.
+entry into an Anki note, via the [AnkiConnect](https://git.sr.ht/~foosoft/anki-connect) HTTP API.
 
 The script adds a **MyAnki** button right next to the site's own *Anki* button. Clicking it reads
 the word, pronunciation, definitions, synonyms, examples, notes and etymology from the current
@@ -31,7 +30,7 @@ than a plain export:
 
 ## Requirements
 
-- Anki (desktop) with **AnkiConnect** enabled and listening on `127.0.0.1:8765`.
+- Anki (desktop) with **AnkiConnect** enabled.
 - A userscript manager — [Tampermonkey](https://www.tampermonkey.net/).
 
 ## Installation
