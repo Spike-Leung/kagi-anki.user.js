@@ -1,7 +1,7 @@
 # Kagi Translate → Anki
 
 A Tampermonkey userscript that turns a [Kagi Translate](https://translate.kagi.com) dictionary
-entry into an Anki note, via the [AnkiConnect](https://foosoft.net/projects/anki-connect/) HTTP API
+entry into an Anki note, via the [AnkiConnect](https://git.sr.ht/~foosoft/anki-connect) HTTP API
 on `127.0.0.1:8765`.
 
 The script adds a **加入 Anki** button right next to the site's own *Anki* button. Clicking it reads
@@ -37,7 +37,6 @@ than a plain export:
 
 ### 1. AnkiConnect
 
-
 - In Anki, go to `Tools → Add-ons → Get Add-ons` and enter code `2055492159`, then restart Anki.
 - Go to `Tools → Add-ons → AnkiConnect → Config` and add this site to webCorsOriginList:
 
@@ -55,7 +54,6 @@ than a plain export:
 2. Open [`kagi-anki.user.js`](kagi-anki.user.js) — Tampermonkey should offer to install it — or create
    a new script in the Tampermonkey dashboard and paste its contents in.
 
-
 ## Configuration
 
 Settings are stored by the userscript manager (Tampermonkey) as script values:
@@ -71,21 +69,11 @@ Settings are stored by the userscript manager (Tampermonkey) as script values:
 Change `deck` / `model` from the picker; other values can be edited in the Tampermonkey dashboard
 (*Settings* / script storage).
 
-### The `Kagi Dictionary` note type
-
-Auto-created with two fields (`Front`, `Back`) and one card template:
-
-- Front template: `{{Front}}`
-- Back template: `{{Back}}`
-
 ## Licensing & attribution
 
-- **`kagi-anki.user.js` and this README** are released into the public domain under the
-  [Unlicense](LICENSE). The script contains no AnkiConnect code; it only talks to AnkiConnect's
-  public HTTP/JSON API at runtime.
-- **`ankiconnect/`** is a copy of **AnkiConnect** by Alex Yatskov, licensed under the
-  **GNU General Public License**. It is vendored here for reference. Upstream:
-  <https://git.sr.ht/~foosoft/anki-connect>.
+**`kagi-anki.user.js` and this README** are released into the public domain under the
+[Unlicense](LICENSE). The script contains no AnkiConnect code; it only talks to
+AnkiConnect's public HTTP/JSON API at runtime.
 
 ## Disclaimer
 
