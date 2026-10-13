@@ -20,8 +20,8 @@ than a plain export:
 - **Synonyms and equivalents under each definition** — shown dimmed beneath the meaning, including
   any *Equivalents in …* row (e.g. Chinese) from the page.
 - **Target word highlighted** — bold and underlined in every example sentence.
-- **Chinese translation on its own line, dimmed** — the English example stays prominent and the
-  Chinese doesn't distract.
+- **Translation on its own line, dimmed** — the source-language example stays prominent and the
+  parenthesised translation doesn't distract.
 
 |       | Built-in Anki                        | This Script                                 |
 |-------|--------------------------------------|---------------------------------------------|
