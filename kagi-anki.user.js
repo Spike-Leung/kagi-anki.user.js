@@ -463,7 +463,9 @@
   function toastError(e) {
     const msg = String((e && e.message) || e);
     if (e && e.code === 'NETWORK') {
-      toast(msg, 'error', { url: README_SETUP_URL, text: 'Setup: Installation → 1. AnkiConnect' });
+      toast(`${msg}
+Open Anki or
+`, 'error', { url: README_SETUP_URL, text: 'Check AnkiConnect Config' });
     } else {
       toast(msg, 'error');
     }
