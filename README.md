@@ -17,8 +17,9 @@ than a plain export:
 
 - **Examples on the front** — context that makes the meaning easier to recall before you flip.
 - **Etymology at the top of the back** — word origins are a strong memory hook.
-- **Part of speech before each definition** — `noun` / `adjective`, shown dimmed.
-- **Synonyms under each definition** — shown dimmed beneath the meaning.
+- **Part of speech before each definition** — `noun` / `adjective`, shown as a bordered chip.
+- **Synonyms and equivalents under each definition** — shown dimmed beneath the meaning, including
+  any *Equivalents in …* row (e.g. Chinese) from the page.
 - **Target word highlighted** — bold and underlined in every example sentence.
 - **Chinese translation on its own line, dimmed** — the English example stays prominent and the
   Chinese doesn't distract.

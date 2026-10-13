@@ -126,6 +126,28 @@
     return [];
   }
 
+  function getEquivalents(p) {
+    let el = p;
+    while (el && el !== document.body) {
+      if (el.querySelectorAll('p[dir="auto"]').length === 1) {
+        const labels = Array.from(el.querySelectorAll('span')).filter((s) =>
+          /^Equivalents in .*:/.test(s.textContent.trim())
+        );
+        const found = [];
+        for (const label of labels) {
+          if (!label.parentElement) continue;
+          const values = Array.from(label.parentElement.querySelectorAll('button'))
+            .map((b) => b.textContent.trim())
+            .filter(Boolean);
+          if (values.length) found.push({ label: label.textContent.trim(), values });
+        }
+        if (found.length) return found;
+      }
+      el = el.parentElement;
+    }
+    return [];
+  }
+
   function getDefinitions() {
     const out = [];
     for (const id of ['primary-meaning', 'other-meanings']) {
@@ -135,10 +157,17 @@
       const defs = Array.from(sec.querySelectorAll('p[dir="auto"]'));
       const n = Math.min(posTags.length, defs.length);
       for (let i = 0; i < n; i++) {
-        out.push({ pos: posTags[i].textContent.trim(), text: defs[i].textContent.trim(), synonyms: getSynonyms(defs[i]) });
+        out.push({
+          pos: posTags[i].textContent.trim(),
+          text: defs[i].textContent.trim(),
+          synonyms: getSynonyms(defs[i]),
+          equivalents: getEquivalents(defs[i]),
+        });
       }
       if (posTags.length === 0) {
-        for (const d of defs) out.push({ pos: '', text: d.textContent.trim(), synonyms: getSynonyms(d) });
+        for (const d of defs) {
+          out.push({ pos: '', text: d.textContent.trim(), synonyms: getSynonyms(d), equivalents: getEquivalents(d) });
+        }
       }
     }
     return out;
@@ -215,11 +244,27 @@
       for (const x of d.definitions) {
         parts.push(
           '<li style="margin:4px 0">' +
-            (x.pos ? '<span style="color:#8a8a8f">' + esc(x.pos) + '</span> ' : '') +
+            (x.pos
+              ? '<span style="display:inline-block;border:1px solid #8FA4FA;border-radius:4px;' +
+                'padding:0 6px;margin-right:6px;font-size:0.82em;line-height:1.6;color:#4a5aa8;' +
+                'background:#8FA4FA1a;vertical-align:middle">' +
+                esc(x.pos) +
+                '</span>'
+              : '') +
             esc(x.text) +
             (x.synonyms && x.synonyms.length
               ? '<div style="color:#8a8a8f;font-size:0.9em;margin-top:2px">Synonyms: ' + x.synonyms.map(esc).join(', ') + '</div>'
               : '') +
+            (x.equivalents || [])
+              .map(
+                (eq) =>
+                  '<div style="color:#8a8a8f;font-size:0.9em;margin-top:2px">' +
+                  esc(eq.label) +
+                  ' ' +
+                  eq.values.map(esc).join(', ') +
+                  '</div>'
+              )
+              .join('') +
             '</li>'
         );
       }
