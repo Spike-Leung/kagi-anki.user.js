@@ -79,8 +79,3 @@ Set *Dictionary Language* and *Equivalents Language* to the language you use.
 ## License
 
 [Unlicense](LICENSE).
-
-## Disclaimer
-
-This project is not affiliated with, endorsed by, or sponsored by Kagi or the AnkiConnect authors.
-Kagi Translate, Anki and AnkiConnect are the property of their respective owners.
