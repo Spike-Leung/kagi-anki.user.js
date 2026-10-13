@@ -19,6 +19,7 @@
   const MODEL_CSS =
     '.card { font-family: Arial, "Microsoft JhengHei", sans-serif; font-size: 18px; ' +
     'line-height: 1.5; text-align: left; color: #111; }';
+  const README_SETUP_URL = 'https://github.com/Spike-Leung/kagi-anki.user.js#1-ankiconnect';
 
   const DEFAULTS = {
     endpoint: 'http://127.0.0.1:8765',
@@ -47,7 +48,7 @@
         body: JSON.stringify(payload),
       });
     } catch (e) {
-      const err = new Error('无法连线 AnkiConnect（' + endpoint + '），请确认 Anki 正在执行');
+      const err = new Error('Cannot reach AnkiConnect at ' + endpoint + '.');
       err.code = 'NETWORK';
       throw err;
     }
@@ -284,7 +285,7 @@
   async function addNoteFor(deck, model) {
     const data = collect();
     if (!data.word) {
-      toast('找不到單詞，請在字典頁面使用此按鈕', 'error');
+      toast('No word found. Use this button on a Kagi Translate dictionary page.', 'error');
       return;
     }
 
@@ -292,7 +293,7 @@
       try {
         await ensureDedicatedModel();
       } catch (e) {
-        toast(String((e && e.message) || e), 'error');
+        toastError(e);
         return;
       }
     }
@@ -301,8 +302,8 @@
     try {
       fieldNames = await api('modelFieldNames', { modelName: model });
     } catch (e) {
-      if (e && e.code === 'NETWORK') toast(e.message, 'error');
-      else toast('找不到 note type：' + model, 'error');
+      if (e && e.code === 'NETWORK') toastError(e);
+      else toast('Note type not found: ' + model, 'error');
       return;
     }
 
@@ -322,18 +323,18 @@
           options: { allowDuplicate: false },
         },
       });
-      toast('已加入 Anki：' + deck, 'success');
+      toast('Added to Anki: ' + deck, 'success');
     } catch (e) {
       const msg = String((e && e.message) || e);
       if (e && e.code === 'NETWORK') {
-        toast(msg, 'error');
+        toastError(e);
       } else if (/duplicate/i.test(msg)) {
-        toast('此單詞已存在（重複），未加入', 'warn');
+        toast('Already exists (duplicate); not added.', 'warn');
       } else if (/deck was not found/i.test(msg)) {
-        toast('找不到 deck，請重新選擇', 'warn');
+        toast('Deck not found. Please choose again.', 'warn');
         openPicker(true);
       } else {
-        toast('加入失敗：' + msg, 'error');
+        toast('Add failed: ' + msg, 'error');
       }
     }
   }
@@ -357,7 +358,7 @@
     ensureDedicatedModel()
       .then((models) => Promise.all([api('deckNames'), models]))
       .then(([decks, models]) => renderPicker(decks, models, thenAdd))
-      .catch((e) => toast(String((e && e.message) || e), 'error'));
+      .catch((e) => toastError(e));
   }
 
   function renderPicker(decks, models, thenAdd) {
@@ -375,14 +376,14 @@
       'background:#fff;color:#111;border-radius:10px;padding:20px;min-width:340px;max-width:90vw;' +
       "box-shadow:0 8px 30px rgba(0,0,0,.3);font:14px/1.5 Arial,'Microsoft JhengHei',sans-serif;";
     box.innerHTML =
-      '<h3 style="margin:0 0 14px">加入 Anki</h3>' +
+      '<h3 style="margin:0 0 14px">Add to Anki</h3>' +
       '<label style="display:block;margin-bottom:10px">Deck' +
       '<select id="kagi-anki-deck" style="display:block;width:100%;padding:6px;margin-top:4px"></select></label>' +
       '<label style="display:block;margin-bottom:16px">Note type' +
       '<select id="kagi-anki-model" style="display:block;width:100%;padding:6px;margin-top:4px"></select></label>' +
       '<div style="display:flex;gap:8px;justify-content:flex-end">' +
-      '<button id="kagi-anki-cancel" style="padding:6px 14px;border:1px solid #ccc;background:#f5f5f5;border-radius:6px;cursor:pointer">取消</button>' +
-      '<button id="kagi-anki-save" style="padding:6px 14px;border:none;background:#3F8611;color:#fff;border-radius:6px;cursor:pointer">確定</button>' +
+      '<button id="kagi-anki-cancel" style="padding:6px 14px;border:1px solid #ccc;background:#f5f5f5;border-radius:6px;cursor:pointer">Cancel</button>' +
+      '<button id="kagi-anki-save" style="padding:6px 14px;border:none;background:#3F8611;color:#fff;border-radius:6px;cursor:pointer">Save</button>' +
       '</div>';
 
     overlay.appendChild(box);
@@ -424,7 +425,7 @@
   let toastEl = null;
   let toastTimer = null;
 
-  function toast(msg, type) {
+  function toast(msg, type, link) {
     if (!toastEl) {
       toastEl = document.createElement('div');
       toastEl.id = 'kagi-anki-toast';
@@ -435,7 +436,17 @@
       error: '#c62828',
       warn: '#b26a00',
     };
-    toastEl.textContent = msg;
+    if (link) {
+      toastEl.innerHTML =
+        esc(msg) +
+        ' <a href="' +
+        link.url +
+        '" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">' +
+        esc(link.text) +
+        '</a>';
+    } else {
+      toastEl.textContent = msg;
+    }
     toastEl.style.cssText =
       'position:fixed;right:20px;bottom:20px;z-index:2147483647;max-width:360px;' +
       'padding:10px 16px;border-radius:8px;color:#fff;font:14px/1.4 Arial,sans-serif;' +
@@ -446,7 +457,16 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       if (toastEl) toastEl.style.opacity = '0';
-    }, 2800);
+    }, link ? 6000 : 2800);
+  }
+
+  function toastError(e) {
+    const msg = String((e && e.message) || e);
+    if (e && e.code === 'NETWORK') {
+      toast(msg, 'error', { url: README_SETUP_URL, text: 'Setup: Installation → 1. AnkiConnect' });
+    } else {
+      toast(msg, 'error');
+    }
   }
 
   const PLUS_ICON =
@@ -469,7 +489,7 @@
     if (svg) svg.outerHTML = PLUS_ICON;
 
     const label = btn.querySelector('span');
-    if (label) label.textContent = '加入 Anki';
+    if (label) label.textContent = 'MyAnki';
 
     btn.addEventListener('click', onAddClick);
     return clone;
@@ -497,10 +517,10 @@
     injectTimer = setTimeout(injectButtons, 250);
   }
 
-  GM_registerMenuCommand('设定 Kagi → Anki（Deck / Note type）', () => openPicker(false));
-  GM_registerMenuCommand('清除已选的 Deck', () => {
+  GM_registerMenuCommand('Configure Kagi → Anki (deck / note type)', () => openPicker(false));
+  GM_registerMenuCommand('Clear saved deck', () => {
     GM_setValue('deck', '');
-    toast('已清除 Deck 选择', 'success');
+    toast('Saved deck cleared.', 'success');
   });
 
   const observer = new MutationObserver(scheduleInject);
