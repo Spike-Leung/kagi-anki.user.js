@@ -16,9 +16,14 @@
   'use strict';
 
   const MODEL_NAME = 'Kagi Dictionary';
-  const MODEL_CSS =
-    '.card { font-family: Arial, "Microsoft JhengHei", sans-serif; font-size: 18px; ' +
-    'line-height: 1.5; text-align: left; color: #111; }';
+  const MODEL_CSS = `
+    .card {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      font-size: 18px;
+      line-height: 1.5;
+      text-align: left;
+      color: #111;
+    }`;
   const README_SETUP_URL = 'https://github.com/Spike-Leung/kagi-anki.user.js#1-ankiconnect';
 
   const DEFAULTS = {
@@ -48,13 +53,13 @@
         body: JSON.stringify(payload),
       });
     } catch (e) {
-      const err = new Error('Cannot reach AnkiConnect at ' + endpoint + '.');
+      const err = new Error(`Cannot reach AnkiConnect at ${endpoint}.`);
       err.code = 'NETWORK';
       throw err;
     }
 
     if (!res.ok) {
-      const err = new Error('HTTP ' + res.status);
+      const err = new Error(`HTTP ${res.status}`);
       err.code = 'HTTP';
       throw err;
     }
@@ -205,6 +210,7 @@
         const b = document.createElement('b');
         b.textContent = s.textContent;
         b.style.textDecoration = 'underline';
+        b.style.textUnderlineOffset = '2px';
         s.replaceWith(b);
       }
       out.push(splitTrailingTranslation(clone.innerHTML));
@@ -230,13 +236,15 @@
 
   function buildFront(d) {
     const parts = [];
-    parts.push('<div style="font-size:1.6em;font-weight:600">' + esc(d.word) + '</div>');
+    parts.push(`<div style="font-size:1.6em;font-weight:600">${esc(d.word)}</div>`);
     if (d.pronunciation) {
-      parts.push('<div style="color:#666;margin:2px 0 8px">' + esc(d.pronunciation) + '</div>');
+      parts.push(`<div style="color:#666;margin:2px 0 8px">${esc(d.pronunciation)}</div>`);
     }
     if (d.examples.length) {
       parts.push('<ol style="margin:0;padding-left:1.3em">');
-      for (const x of d.examples) parts.push('<li style="margin:4px 0">' + x.sentence + '</li>');
+      for (const x of d.examples) {
+        parts.push(`<li style="margin:4px 0">${x.sentence}</li>`);
+      }
       parts.push('</ol>');
     }
     return parts.join('');
@@ -244,45 +252,36 @@
 
   function buildBack(d) {
     const parts = [];
-    parts.push('<div style="font-size:1.5em;font-weight:600">' + esc(d.word) + '</div>');
+    parts.push(`<div style="font-size:1.5em;font-weight:600">${esc(d.word)}</div>`);
     if (d.pronunciation) {
-      parts.push('<div style="color:#666;margin:2px 0 10px">' + esc(d.pronunciation) + '</div>');
+      parts.push(`<div style="color:#666;margin:2px 0 10px">${esc(d.pronunciation)}</div>`);
     }
 
     if (d.etymology) {
       parts.push('<h4 style="margin:12px 0 4px;font-size:1em;text-align:left">Etymology</h4>');
-      parts.push('<p style="margin:0">' + esc(d.etymology) + '</p>');
+      parts.push(`<p style="margin:0">${esc(d.etymology)}</p>`);
     }
 
     if (d.definitions.length) {
       parts.push('<h4 style="margin:12px 0 4px;font-size:1em;text-align:left">Definitions</h4>');
       parts.push('<ul style="margin:0;padding-left:1.3em">');
       for (const x of d.definitions) {
-        parts.push(
-          '<li style="margin:4px 0">' +
-            (x.pos
-              ? '<span style="display:inline-block;border:1px solid #8FA4FA;border-radius:4px;' +
-                'padding:0 6px;margin-right:6px;font-size:0.82em;line-height:1.6;color:#4a5aa8;' +
-                'background:#8FA4FA1a;vertical-align:middle">' +
-                esc(x.pos) +
-                '</span>'
-              : '') +
-            esc(x.text) +
-            (x.synonyms && x.synonyms.length
-              ? '<div style="color:#8a8a8f;font-size:0.9em;margin-top:2px">Synonyms: ' + x.synonyms.map(esc).join(', ') + '</div>'
-              : '') +
-            (x.equivalents || [])
-              .map(
-                (eq) =>
-                  '<div style="color:#8a8a8f;font-size:0.9em;margin-top:2px">' +
-                  esc(eq.label) +
-                  ' ' +
-                  eq.values.map(esc).join(', ') +
-                  '</div>'
-              )
-              .join('') +
-            '</li>'
-        );
+        const pos = x.pos
+          ? `<span style="display:inline-block;border:1px solid #8FA4FA;border-radius:4px;
+               padding:0 6px;margin-right:6px;font-size:0.82em;line-height:1.6;color:#4a5aa8;
+               background:#8FA4FA1a;vertical-align:middle">${esc(x.pos)}</span>`
+          : '';
+        const synonyms =
+          x.synonyms && x.synonyms.length
+            ? `<div style="color:#8a8a8f;font-size:0.9em;margin-top:2px">Synonyms: ${x.synonyms.map(esc).join(', ')}</div>`
+            : '';
+        const equivalents = (x.equivalents || [])
+          .map(
+            (eq) =>
+              `<div style="color:#8a8a8f;font-size:0.9em;margin-top:2px">${esc(eq.label)} ${eq.values.map(esc).join(', ')}</div>`
+          )
+          .join('');
+        parts.push(`<li style="margin:4px 0">${pos}${esc(x.text)}${synonyms}${equivalents}</li>`);
       }
       parts.push('</ul>');
     }
@@ -291,19 +290,15 @@
       parts.push('<h4 style="margin:12px 0 4px;font-size:1em;text-align:left">Examples</h4>');
       parts.push('<ol style="margin:0;padding-left:1.3em">');
       for (const x of d.examples) {
-        parts.push(
-          '<li style="margin:6px 0">' +
-            x.sentence +
-            (x.translation ? '<div style="color:#8a8a8f">' + x.translation + '</div>' : '') +
-            '</li>'
-        );
+        const translation = x.translation ? `<div style="color:#8a8a8f">${x.translation}</div>` : '';
+        parts.push(`<li style="margin:6px 0">${x.sentence}${translation}</li>`);
       }
       parts.push('</ol>');
     }
 
     if (d.notes) {
       parts.push('<h4 style="margin:12px 0 4px;font-size:1em;text-align:left">Notes</h4>');
-      parts.push('<p style="margin:0">' + esc(d.notes) + '</p>');
+      parts.push(`<p style="margin:0">${esc(d.notes)}</p>`);
     }
 
     return parts.join('');
@@ -318,7 +313,7 @@
 
     const fields = {};
     if (backName === frontName) {
-      fields[frontName] = front + '<hr>' + back;
+      fields[frontName] = `${front}<hr>${back}`;
     } else {
       fields[frontName] = front;
       fields[backName] = back;
@@ -364,7 +359,7 @@
       fieldNames = await api('modelFieldNames', { modelName: model });
     } catch (e) {
       if (e && e.code === 'NETWORK') toastError(e);
-      else toast('Note type not found: ' + model, 'error');
+      else toast(`Note type not found: ${model}`, 'error');
       return;
     }
 
@@ -384,7 +379,7 @@
           options: { allowDuplicate: false },
         },
       });
-      toast('Added to Anki: ' + deck, 'success');
+      toast(`Added to Anki: ${deck}`, 'success');
     } catch (e) {
       const msg = String((e && e.message) || e);
       if (e && e.code === 'NETWORK') {
@@ -395,7 +390,7 @@
         toast('Deck not found. Please choose again.', 'warn');
         openPicker(true);
       } else {
-        toast('Add failed: ' + msg, 'error');
+        toast(`Add failed: ${msg}`, 'error');
       }
     }
   }
@@ -428,24 +423,26 @@
 
     const overlay = document.createElement('div');
     overlay.id = 'kagi-anki-picker';
-    overlay.style.cssText =
-      'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2147483646;' +
-      'display:flex;align-items:center;justify-content:center;';
+    overlay.style.cssText = `
+      position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2147483646;
+      display:flex;align-items:center;justify-content:center;`;
 
     const box = document.createElement('div');
-    box.style.cssText =
-      'background:#fff;color:#111;border-radius:10px;padding:20px;min-width:340px;max-width:90vw;' +
-      "box-shadow:0 8px 30px rgba(0,0,0,.3);font:14px/1.5 Arial,'Microsoft JhengHei',sans-serif;";
-    box.innerHTML =
-      '<h3 style="margin:0 0 14px">Add to Anki</h3>' +
-      '<label style="display:block;margin-bottom:10px">Deck' +
-      '<select id="kagi-anki-deck" style="display:block;width:100%;padding:6px;margin-top:4px"></select></label>' +
-      '<label style="display:block;margin-bottom:16px">Note type' +
-      '<select id="kagi-anki-model" style="display:block;width:100%;padding:6px;margin-top:4px"></select></label>' +
-      '<div style="display:flex;gap:8px;justify-content:flex-end">' +
-      '<button id="kagi-anki-cancel" style="padding:6px 14px;border:1px solid #ccc;background:#f5f5f5;border-radius:6px;cursor:pointer">Cancel</button>' +
-      '<button id="kagi-anki-save" style="padding:6px 14px;border:none;background:#3F8611;color:#fff;border-radius:6px;cursor:pointer">Save</button>' +
-      '</div>';
+    box.style.cssText = `
+      background:#fff;color:#111;border-radius:10px;padding:20px;min-width:340px;max-width:90vw;
+      box-shadow:0 8px 30px rgba(0,0,0,.3);font:14px/1.5 Arial,'Microsoft JhengHei',sans-serif;`;
+    box.innerHTML = `
+      <h3 style="margin:0 0 14px">Add to Anki</h3>
+      <label style="display:block;margin-bottom:10px">Deck
+        <select id="kagi-anki-deck" style="display:block;width:100%;padding:6px;margin-top:4px"></select>
+      </label>
+      <label style="display:block;margin-bottom:16px">Note type
+        <select id="kagi-anki-model" style="display:block;width:100%;padding:6px;margin-top:4px"></select>
+      </label>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button id="kagi-anki-cancel" style="padding:6px 14px;border:1px solid #ccc;background:#f5f5f5;border-radius:6px;cursor:pointer">Cancel</button>
+        <button id="kagi-anki-save" style="padding:6px 14px;border:none;background:#3F8611;color:#fff;border-radius:6px;cursor:pointer">Save</button>
+      </div>`;
 
     overlay.appendChild(box);
     document.body.appendChild(overlay);
@@ -498,23 +495,15 @@
       warn: '#b26a00',
     };
     if (link) {
-      toastEl.innerHTML =
-        esc(msg) +
-        ' <a href="' +
-        link.url +
-        '" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">' +
-        esc(link.text) +
-        '</a>';
+      toastEl.innerHTML = `${esc(msg)} <a href="${link.url}" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">${esc(link.text)}</a>`;
     } else {
       toastEl.textContent = msg;
     }
-    toastEl.style.cssText =
-      'position:fixed;right:20px;bottom:20px;z-index:2147483647;max-width:360px;' +
-      'padding:10px 16px;border-radius:8px;color:#fff;font:14px/1.4 Arial,sans-serif;' +
-      'box-shadow:0 4px 16px rgba(0,0,0,.3);transition:opacity .2s;opacity:1;' +
-      'background:' +
-      (colors[type] || colors.success) +
-      ';';
+    toastEl.style.cssText = `
+      position:fixed;right:20px;bottom:20px;z-index:2147483647;max-width:360px;
+      padding:10px 16px;border-radius:8px;color:#fff;font:14px/1.4 Arial,sans-serif;
+      box-shadow:0 4px 16px rgba(0,0,0,.3);transition:opacity .2s;opacity:1;
+      background:${colors[type] || colors.success};`;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       if (toastEl) toastEl.style.opacity = '0';
@@ -532,12 +521,13 @@ Open Anki or
     }
   }
 
-  const PLUS_ICON =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" ' +
-    'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ' +
-    'class="tabler-icon tabler-icon-plus text-primary-600 dark:text-primary-400 group-hover:text-primary ' +
-    'transition-colors dark:group-hover:text-white">' +
-    '<path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>';
+  const PLUS_ICON = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="tabler-icon tabler-icon-plus text-primary-600 dark:text-primary-400 group-hover:text-primary
+      transition-colors dark:group-hover:text-white">
+      <path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+    </svg>`;
 
   function makeAddButton(ankiBtn) {
     const wrapper = ankiBtn.parentElement;
