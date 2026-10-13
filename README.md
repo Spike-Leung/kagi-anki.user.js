@@ -70,11 +70,15 @@ Settings are stored by the userscript manager (Tampermonkey) as script values:
 Change `deck` / `model` from the picker; other values can be edited in the Tampermonkey dashboard
 (*Settings* / script storage).
 
-## Licensing & attribution
+### Recommended Kagi Translate Dictionary Config
 
-**`kagi-anki.user.js` and this README** are released into the public domain under the
-[Unlicense](LICENSE). The script contains no AnkiConnect code; it only talks to
-AnkiConnect's public HTTP/JSON API at runtime.
+Set *Dictionary Language* and *Equivalents Language* to the language you use.
+
+![](./screenshot/kagi-translate-config.png)
+
+## License
+
+[Unlicense](LICENSE).
 
 ## Disclaimer
 
