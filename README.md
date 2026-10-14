@@ -1,4 +1,4 @@
-# Kagi Translate → Anki
+# kagi-anki.user.js
 
 A Tampermonkey userscript that turns a [Kagi Translate](https://translate.kagi.com) dictionary
 entry into an Anki note, via the [AnkiConnect](https://git.sr.ht/~foosoft/anki-connect) HTTP API.
