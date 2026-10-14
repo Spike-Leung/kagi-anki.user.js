@@ -192,7 +192,7 @@
         if (depth === 0) {
           const sentence = s.slice(0, i).trim();
           if (!sentence) break;
-          return { sentence, translation: s.slice(i).trim() };
+          return { sentence, translation: s.slice(i + 1, -1).trim() };
         }
       }
     }
@@ -238,7 +238,7 @@
     const parts = [];
     parts.push(`<div style="font-size:1.6em;font-weight:600">${esc(d.word)}</div>`);
     if (d.pronunciation) {
-      parts.push(`<div style="color:#666;margin:2px 0 8px">${esc(d.pronunciation)}</div>`);
+      parts.push(`<div style="color:#666;margin:2px 0 10px">${esc(d.pronunciation)}</div>`);
     }
     if (d.examples.length) {
       parts.push('<ol style="margin:0;padding-left:1.3em">');
@@ -252,7 +252,7 @@
 
   function buildBack(d) {
     const parts = [];
-    parts.push(`<div style="font-size:1.5em;font-weight:600">${esc(d.word)}</div>`);
+    parts.push(`<div style="font-size:1.6em;font-weight:600">${esc(d.word)}</div>`);
     if (d.pronunciation) {
       parts.push(`<div style="color:#666;margin:2px 0 10px">${esc(d.pronunciation)}</div>`);
     }
